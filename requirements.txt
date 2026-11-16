@@ -10,3 +10,4 @@ jupyter
 datasets
 streamlit
 pyvis
+pytest
