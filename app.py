@@ -1,55 +1,57 @@
 import streamlit as st
 import pandas as pd
+import io
 
 # 1. Page configuration
 st.set_page_config(page_title="ShellGuard", page_icon="🕵️‍♂️", layout="wide")
 
-# 2. Title and description
 st.title("🕵️‍♂️ ShellGuard: Forensic Network Analytics")
 st.markdown("""
 Welcome to the ShellGuard Dashboard. 
-This tool analyzes corporate ownership networks to detect potential shell companies using machine learning and graph theory.
+Upload a corporate metrics dataset (CSV) to detect potential shell companies.
 """)
 
-# 3. Sidebar controls
-st.sidebar.header("Data Controls")
-if st.sidebar.button("Load Project Data"):
-    st.session_state['data_loaded'] = True
+# 2. Sidebar: File Uploader
+st.sidebar.header("Upload Data")
+uploaded_file = st.sidebar.file_uploader("Upload node_metrics.csv", type=["csv"])
 
-# 4. Main dashboard logic
-if st.session_state.get('data_loaded', False):
+# 3. Main Dashboard Logic
+if uploaded_file is not None:
     try:
-        # Load the metrics we generated earlier
-        df = pd.read_csv("outputs/node_metrics.csv")
-        df = df[df["entity_type"] == "company"]
+        # Read the uploaded CSV file
+        df = pd.read_csv(uploaded_file)
         
-        # Top KPI metrics
+        # Ensure it's only companies
+        if "entity_type" in df.columns:
+            df = df[df["entity_type"] == "company"]
+        
+        # Calculate metrics
         total_companies = len(df)
-        flagged_shells = len(df[df["is_shell"] == 1])
+        flagged_shells = len(df[df["is_shell"] == 1]) if "is_shell" in df.columns else 0
         
+        # KPI Metrics
         col1, col2, col3 = st.columns(3)
-        col1.metric("Total Companies Analyzed", total_companies)
+        col1.metric("Total Companies Uploaded", total_companies)
         col2.metric("Flagged Shell Companies", flagged_shells)
-        col3.metric("Model ROC-AUC", "1.0000")
+        col3.metric("Model Status", "Active")
         
         st.divider()
         
-        # Layout for data table and chart
-        col_left, col_right = st.columns(2)
-        
-        with col_left:
-            st.subheader("High-Risk Entities (Top 5)")
-            # Sort by betweenness (highest risk) and show top 5
+        # Data Table
+        st.subheader("High-Risk Entities (Top 5)")
+        if "betweenness" in df.columns:
             top_risk = df.sort_values(by="betweenness", ascending=False).head(5)
-            st.dataframe(top_risk[["entity_id", "jurisdiction", "betweenness", "pagerank", "is_shell"]], use_container_width=True)
+            cols_to_show = [c for c in ["entity_id", "jurisdiction", "betweenness", "pagerank", "is_shell"] if c in df.columns]
+            st.dataframe(top_risk[cols_to_show], use_container_width=True)
             
-        with col_right:
-            st.subheader("Explainable AI (SHAP)")
-            st.markdown("Why was this entity flagged?")
-            # Display the SHAP image we just generated!
-            st.image("outputs/fig03_shap_explanation.png", use_container_width=True)
+        # Display the SHAP image
+        st.subheader("Explainable AI (SHAP)")
+        try:
+            st.image("outputs/fig03_shap_explanation.png", caption="Why was this entity flagged?")
+        except FileNotFoundError:
+            st.info("SHAP chart not found. Run explain_model.py to generate it.")
             
-    except FileNotFoundError:
-        st.error("Data not found! Please run the Python scripts in the `src` folder first to generate the data.")
+    except Exception as e:
+        st.error(f"Error processing the file: {e}")
 else:
-    st.info("👈 Click 'Load Project Data' in the sidebar to start.")
+    st.info("👈 Please upload a CSV file in the sidebar to begin analysis.")
