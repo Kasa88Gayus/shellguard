@@ -23,3 +23,8 @@ pip install -r requirements.txt
 python src/make_synthetic.py
 python src/build_graph.py
 python src/baseline_model.py
+### Week 2 & 3 Updates
+- Built an interactive **Streamlit Web Dashboard** that accepts CSV uploads for real-time risk scoring.
+- Implemented **SHAP (Explainable AI)** to generate visual justifications for flagged entities.
+- Developed a **Graph Neural Network (GNN)** using `PyTorch Geometric` to learn structural embeddings.
+- **Results**: Random Forest Baseline (ROC-AUC: 1.0000) vs. GNN (ROC-AUC: 0.9377).
