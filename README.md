@@ -24,20 +24,3 @@ python src/make_synthetic.py
 python src/build_graph.py
 python src/baseline_model.py
 
-
-*(Notice the `##` before "Week 2 & 3 Updates". This makes it a proper heading, just like "Getting Started").*
-
-Scroll down and click **Commit changes**.
-
----
-
-### 📝 Step 2: Let's write the Research Paper (Methodology & Results)
-
-You have all the technical results. Now we need to turn this into a document that a university admissions board will drool over. 
-
-You don't need to write it from scratch. As a data scientist, you let the data write the story. We are going to create a `docs/paper_draft.md` file.
-
-In your Ubuntu terminal, run:
-```bash
-nano docs/paper_draft.md
-
