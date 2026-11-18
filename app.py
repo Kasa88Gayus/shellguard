@@ -47,7 +47,7 @@ if uploaded_file is not None:
         # Display the SHAP image
         st.subheader("Explainable AI (SHAP)")
         try:
-            st.image("outputs/fig03_shap_explanation.png", caption="Why was this entity flagged?")
+            st.image("fig03_shap_explanation.png", caption="Why was this entity flagged?")
         except FileNotFoundError:
             st.info("SHAP chart not found. Run explain_model.py to generate it.")
             
