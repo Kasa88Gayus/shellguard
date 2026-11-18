@@ -1,5 +1,7 @@
 # ShellGuard: Explainable Graph-Based Risk Engine
 
+**🚀 [Launch the Live Interactive Dashboard](https://shellguard-forensics.streamlit.app)**
+
 ## Overview
 ShellGuard is an open-source research prototype designed to detect illicit shell-company and vendor-network fraud topologies. It models corporate ownership structures as heterogeneous graphs and applies machine learning to flag suspicious entities.
 
