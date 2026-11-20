@@ -6,3 +6,4 @@ __pycache__/
 outputs/*.png
 outputs/*.csv
 .DS_Store
+outputs/
