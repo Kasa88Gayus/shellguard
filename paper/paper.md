@@ -9,6 +9,7 @@ tags:
   - anti-money laundering
 authors:
   - name: Yohanna Kasa
+    orcid: 0009-0008-6240-4488
     affiliation: 1
 affiliations:
   - name: Anti-Money Laundering and Transaction Compliance Specialist
